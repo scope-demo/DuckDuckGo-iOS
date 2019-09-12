@@ -159,6 +159,7 @@
 		853C5F6321C3D667001F7A05 /* EnhancedHomePageVariantManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853C5F6221C3D667001F7A05 /* EnhancedHomePageVariantManagerTests.swift */; };
 		853C5F6521C3E697001F7A05 /* MockBookmarkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853C5F6421C3E697001F7A05 /* MockBookmarkStore.swift */; };
 		85436C3F1FA74BC300F4EEE1 /* PrivacyProtection.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85436C3E1FA74BC300F4EEE1 /* PrivacyProtection.xcassets */; };
+		854C478723241456002CD9BF /* PrivacyDashboardCookiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854C478623241456002CD9BF /* PrivacyDashboardCookiesViewController.swift */; };
 		855D914D2063EF6A00C4B448 /* CompositeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855D914C2063EF6A00C4B448 /* CompositeTransition.swift */; };
 		855D914F206563A000C4B448 /* TLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855D914E206563A000C4B448 /* TLD.swift */; };
 		8563A0351F8E369400F04442 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8563A0341F8E369400F04442 /* Home.storyboard */; };
@@ -743,6 +744,7 @@
 		853C5F6221C3D667001F7A05 /* EnhancedHomePageVariantManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedHomePageVariantManagerTests.swift; sourceTree = "<group>"; };
 		853C5F6421C3E697001F7A05 /* MockBookmarkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBookmarkStore.swift; sourceTree = "<group>"; };
 		85436C3E1FA74BC300F4EEE1 /* PrivacyProtection.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PrivacyProtection.xcassets; sourceTree = "<group>"; };
+		854C478623241456002CD9BF /* PrivacyDashboardCookiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyDashboardCookiesViewController.swift; sourceTree = "<group>"; };
 		855D914C2063EF6A00C4B448 /* CompositeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTransition.swift; sourceTree = "<group>"; };
 		855D914E206563A000C4B448 /* TLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLD.swift; sourceTree = "<group>"; };
 		8563A0341F8E369400F04442 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
@@ -1616,6 +1618,7 @@
 				8565A3421FC5995900239327 /* PrivacyProtectionTrackerNetworksController.swift */,
 				85200F961FBB31E8001AF290 /* SiteRatingPrivacyProtectionExtension.swift */,
 				85200FA71FBDE472001AF290 /* UIColorPrivacyProtectionExtension.swift */,
+				854C478623241456002CD9BF /* PrivacyDashboardCookiesViewController.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -3458,6 +3461,7 @@
 				85EE7F572246685B000FE757 /* WebContainerViewController.swift in Sources */,
 				F1CA3C391F045885005FADB3 /* PrivacyUserDefaults.swift in Sources */,
 				8563A03C1F9288D600F04442 /* BrowserChromeManager.swift in Sources */,
+				854C478723241456002CD9BF /* PrivacyDashboardCookiesViewController.swift in Sources */,
 				980891A32237146B00313A70 /* Feedback.swift in Sources */,
 				F1D796F01E7B07610019D451 /* BookmarkCell.swift in Sources */,
 				85058369219F424500ED4EDB /* UIColorExtension.swift in Sources */,

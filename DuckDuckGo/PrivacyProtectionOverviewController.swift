@@ -34,7 +34,8 @@ class PrivacyProtectionOverviewController: UITableViewController {
     @IBOutlet weak var encryptionCell: SummaryCell!
     @IBOutlet weak var trackersCell: SummaryCell!
     @IBOutlet weak var privacyPracticesCell: SummaryCell!
-    
+    @IBOutlet weak var cookiesCell: SummaryCell!
+
     fileprivate var popRecognizer: InteractivePopRecognizer!
     
     private var siteRating: SiteRating!
@@ -85,6 +86,14 @@ class PrivacyProtectionOverviewController: UITableViewController {
         updateEncryption()
         updateTrackers()
         updatePrivacyPractices()
+        updateCookieCount()
+    }
+
+    private func updateCookieCount() {
+        self.cookiesCell.summaryLabel.text = "Cookies"
+        WebCacheManager.cookies(for: siteRating.url) {
+            self.cookiesCell.summaryLabel.text = "\($0.count) Cookies"
+        }
     }
     
     private func updateEncryption() {

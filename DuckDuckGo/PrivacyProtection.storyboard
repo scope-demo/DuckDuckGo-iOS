@@ -13,6 +13,9 @@
         <array key="proximanova-bold.otf">
             <string>ProximaNova-Bold</string>
         </array>
+        <array key="proximanova-light.otf">
+            <string>ProximaNova-Light</string>
+        </array>
         <array key="proximanova-regular.otf">
             <string>ProximaNova-Regular</string>
         </array>
@@ -31,7 +34,7 @@
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <containerView key="tableFooterView" opaque="NO" contentMode="scaleToFill" id="GO3-WM-6Yh">
-                            <rect key="frame" x="0.0" y="382" width="414" height="248"/>
+                            <rect key="frame" x="0.0" y="439" width="414" height="248"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <connections>
                                 <outletCollection property="gestureRecognizers" destination="uVQ-4K-5eS" appends="YES" id="9Km-eu-cB4"/>
@@ -205,6 +208,50 @@
                                             <segue destination="ASo-lP-j3Z" kind="show" id="k93-wm-om6"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="57" id="4Nq-Aa-pF8" userLabel="Cookies Cell" customClass="SummaryCell" customModule="DuckDuckGo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="382" width="414" height="57"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4Nq-Aa-pF8" id="f3p-5S-kzX">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="56.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="PP Icon Privacy Bad Off" translatesAutoresizingMaskIntoConstraints="NO" id="wbC-iM-7pq">
+                                                    <rect key="frame" x="28" y="8.3333333333333357" width="40" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="dN3-eq-QCH"/>
+                                                        <constraint firstAttribute="height" constant="40" id="uNc-gp-KxZ"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="8 Cookies" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sbr-Of-yNC">
+                                                    <rect key="frame" x="78" y="20.333333333333332" width="308" height="15.999999999999996"/>
+                                                    <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="16"/>
+                                                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PP Arrow Forward" translatesAutoresizingMaskIntoConstraints="NO" id="F9L-cp-cGE">
+                                                    <rect key="frame" x="380" y="20.333333333333332" width="10" height="15.999999999999996"/>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="wbC-iM-7pq" firstAttribute="leading" secondItem="f3p-5S-kzX" secondAttribute="leadingMargin" constant="8" id="2SA-Zr-Iho"/>
+                                                <constraint firstItem="Sbr-Of-yNC" firstAttribute="centerY" secondItem="f3p-5S-kzX" secondAttribute="centerY" id="DKt-bn-FyY"/>
+                                                <constraint firstItem="wbC-iM-7pq" firstAttribute="centerY" secondItem="f3p-5S-kzX" secondAttribute="centerY" id="F02-mP-Dz4"/>
+                                                <constraint firstAttribute="trailing" secondItem="F9L-cp-cGE" secondAttribute="trailing" constant="24" id="QGL-WQ-nij"/>
+                                                <constraint firstItem="Sbr-Of-yNC" firstAttribute="leading" secondItem="wbC-iM-7pq" secondAttribute="trailing" constant="10" id="bUN-z6-D2o"/>
+                                                <constraint firstItem="F9L-cp-cGE" firstAttribute="centerY" secondItem="f3p-5S-kzX" secondAttribute="centerY" id="dsu-Lw-Fyf"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Sbr-Of-yNC" secondAttribute="trailing" constant="8" id="nZA-kb-lEe"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="privacyPractices">
+                                            <bool key="isElement" value="YES"/>
+                                        </accessibility>
+                                        <connections>
+                                            <outlet property="summaryImage" destination="wbC-iM-7pq" id="poy-2u-OxC"/>
+                                            <outlet property="summaryLabel" destination="Sbr-Of-yNC" id="jhP-lt-fNx"/>
+                                            <segue destination="loT-DD-2Av" kind="show" id="9RP-Jq-UmI"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -214,6 +261,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="cookiesCell" destination="4Nq-Aa-pF8" id="J3a-bS-uE5"/>
                         <outlet property="encryptionCell" destination="goO-wb-Nup" id="oyA-Bs-y4l"/>
                         <outlet property="privacyPracticesCell" destination="7tG-Dt-rZf" id="bRZ-1X-bt7"/>
                         <outlet property="trackersCell" destination="izo-7V-yei" id="X6C-vM-6Xq"/>
@@ -222,6 +270,7 @@
                         <outletCollection property="margins" destination="bzH-Rj-FGO" collectionClass="NSMutableArray" id="ICM-Xz-Zcm"/>
                         <outletCollection property="margins" destination="Cqa-9f-z0l" collectionClass="NSMutableArray" id="Hoy-ql-gcz"/>
                         <outletCollection property="margins" destination="Hf5-y4-Z8m" collectionClass="NSMutableArray" id="3Dt-xn-CFA"/>
+                        <outletCollection property="margins" destination="2SA-Zr-Iho" collectionClass="NSMutableArray" id="buH-eX-N2Q"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zoi-h2-ui9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1810,8 +1859,225 @@
             </objects>
             <point key="canvasLocation" x="-106" y="408"/>
         </scene>
+        <!--Privacy Dashboard Cookies View Controller-->
+        <scene sceneID="am8-jJ-cqq">
+            <objects>
+                <viewController id="loT-DD-2Av" customClass="PrivacyDashboardCookiesViewController" customModule="DuckDuckGo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="niU-ZM-5o1">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MlN-OV-PxU">
+                                <rect key="frame" x="0.0" y="20" width="414" height="716"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="4aN-pr-73d" userLabel="Header">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="240"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PP Hero Privacy Good On" translatesAutoresizingMaskIntoConstraints="NO" id="uSu-hp-XZO">
+                                            <rect key="frame" x="183" y="20" width="48" height="65"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="www.example.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyd-cV-wew">
+                                            <rect key="frame" x="40" y="90" width="334" height="20"/>
+                                            <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="20"/>
+                                            <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="COOKIES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vl0-Z4-Zir" userLabel="Summary Label">
+                                            <rect key="frame" x="20" y="116" width="374" height="12"/>
+                                            <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="12"/>
+                                            <color key="textColor" red="0.57647058819999997" green="0.57647058819999997" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aav-B8-BjS">
+                                            <rect key="frame" x="0.0" y="155" width="414" height="85"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NyW-Wd-EBJ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
+                                                    <color key="backgroundColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="MBK-rb-KdB"/>
+                                                    </constraints>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHa-7V-IUV">
+                                                    <rect key="frame" x="24" y="15.666666666666657" width="366" height="54"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment>
+                                                            <string key="content">Websites can use cookies to keep you logged in or for tracking you.   We'll remove these when you clear your tabs and data unless you tell us not to.</string>
+                                                            <attributes>
+                                                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <font key="NSFont" size="14" name="ProximaNova-Regular"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.28" tighteningFactorForTruncation="0.0"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UO7-yA-gv0">
+                                                    <rect key="frame" x="20" y="84" width="374" height="1"/>
+                                                    <color key="backgroundColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="iRn-YF-nhd"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="LHa-7V-IUV" firstAttribute="centerY" secondItem="aav-B8-BjS" secondAttribute="centerY" id="4Ww-Td-nxV"/>
+                                                <constraint firstItem="UO7-yA-gv0" firstAttribute="centerX" secondItem="aav-B8-BjS" secondAttribute="centerX" id="4f2-HR-BO0"/>
+                                                <constraint firstItem="UO7-yA-gv0" firstAttribute="width" secondItem="aav-B8-BjS" secondAttribute="width" constant="-40" id="BjZ-jc-1gj"/>
+                                                <constraint firstItem="LHa-7V-IUV" firstAttribute="centerX" secondItem="aav-B8-BjS" secondAttribute="centerX" id="IxE-er-Hel"/>
+                                                <constraint firstItem="LHa-7V-IUV" firstAttribute="width" secondItem="aav-B8-BjS" secondAttribute="width" constant="-48" id="VrJ-KI-KhJ"/>
+                                                <constraint firstItem="NyW-Wd-EBJ" firstAttribute="width" secondItem="aav-B8-BjS" secondAttribute="width" id="fV1-17-oU6"/>
+                                                <constraint firstItem="NyW-Wd-EBJ" firstAttribute="top" secondItem="aav-B8-BjS" secondAttribute="top" id="hVN-Sc-bwz"/>
+                                                <constraint firstAttribute="height" constant="85" id="i4f-n5-SFq"/>
+                                                <constraint firstAttribute="bottom" secondItem="UO7-yA-gv0" secondAttribute="bottom" id="jMB-Zh-PVg"/>
+                                                <constraint firstItem="NyW-Wd-EBJ" firstAttribute="centerX" secondItem="aav-B8-BjS" secondAttribute="centerX" id="m0X-6S-lRx"/>
+                                            </constraints>
+                                        </view>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MmQ-2e-AcY">
+                                            <rect key="frame" x="20" y="20" width="30" height="22"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="backButton"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="30" id="LfR-kt-In0"/>
+                                            </constraints>
+                                            <state key="normal" image="PP Arrow Back"/>
+                                            <connections>
+                                                <action selector="onBack" destination="3wX-Uf-JRU" eventType="touchUpInside" id="Nis-SK-fNO"/>
+                                            </connections>
+                                        </button>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dTQ-EQ-37x" userLabel="Tap View">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="155"/>
+                                            <gestureRecognizers/>
+                                            <connections>
+                                                <outletCollection property="gestureRecognizers" destination="RFy-xn-3EP" appends="YES" id="nPc-mE-Mha"/>
+                                            </connections>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="uSu-hp-XZO" firstAttribute="top" secondItem="4aN-pr-73d" secondAttribute="top" constant="20" id="1d6-xh-u9I"/>
+                                        <constraint firstItem="MmQ-2e-AcY" firstAttribute="leading" secondItem="4aN-pr-73d" secondAttribute="leading" constant="20" id="6cf-gc-EiX"/>
+                                        <constraint firstItem="aav-B8-BjS" firstAttribute="width" secondItem="4aN-pr-73d" secondAttribute="width" id="GaR-W3-WzB"/>
+                                        <constraint firstItem="aav-B8-BjS" firstAttribute="top" secondItem="dTQ-EQ-37x" secondAttribute="bottom" id="HWD-af-ecx"/>
+                                        <constraint firstItem="dTQ-EQ-37x" firstAttribute="top" secondItem="4aN-pr-73d" secondAttribute="top" id="OrP-g8-SNo"/>
+                                        <constraint firstItem="uSu-hp-XZO" firstAttribute="centerX" secondItem="4aN-pr-73d" secondAttribute="centerX" id="RC0-I8-DB4"/>
+                                        <constraint firstItem="qyd-cV-wew" firstAttribute="width" secondItem="4aN-pr-73d" secondAttribute="width" constant="-80" id="V5X-lD-eab"/>
+                                        <constraint firstItem="Vl0-Z4-Zir" firstAttribute="centerX" secondItem="4aN-pr-73d" secondAttribute="centerX" id="WfB-yI-pQJ"/>
+                                        <constraint firstItem="Vl0-Z4-Zir" firstAttribute="width" secondItem="4aN-pr-73d" secondAttribute="width" constant="-40" id="ZFW-tn-CcR"/>
+                                        <constraint firstItem="aav-B8-BjS" firstAttribute="centerX" secondItem="4aN-pr-73d" secondAttribute="centerX" id="cCf-1i-iJC"/>
+                                        <constraint firstItem="Vl0-Z4-Zir" firstAttribute="top" secondItem="qyd-cV-wew" secondAttribute="bottom" constant="6" id="dDN-nX-fPc"/>
+                                        <constraint firstAttribute="bottom" secondItem="aav-B8-BjS" secondAttribute="bottom" id="i3c-C0-5x5"/>
+                                        <constraint firstItem="qyd-cV-wew" firstAttribute="top" secondItem="uSu-hp-XZO" secondAttribute="bottom" constant="5" id="i9M-JO-dSs"/>
+                                        <constraint firstItem="qyd-cV-wew" firstAttribute="centerX" secondItem="4aN-pr-73d" secondAttribute="centerX" id="rdP-UX-R1A"/>
+                                        <constraint firstItem="dTQ-EQ-37x" firstAttribute="width" secondItem="4aN-pr-73d" secondAttribute="width" id="wvS-Zg-oxR"/>
+                                        <constraint firstItem="MmQ-2e-AcY" firstAttribute="top" secondItem="4aN-pr-73d" secondAttribute="top" constant="20" id="yFm-Qg-hrn"/>
+                                        <constraint firstItem="dTQ-EQ-37x" firstAttribute="centerX" secondItem="4aN-pr-73d" secondAttribute="centerX" id="zvW-5V-s3t"/>
+                                    </constraints>
+                                </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CookieDetail" rowHeight="72" id="YN1-0I-pEo" customClass="CookieDetailCell" customModule="DuckDuckGo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="268" width="414" height="72"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YN1-0I-pEo" id="m4O-MU-tKd">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="72"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fire" translatesAutoresizingMaskIntoConstraints="NO" id="9GT-cP-O2l">
+                                                    <rect key="frame" x="12" y="22" width="28" height="28"/>
+                                                    <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="28" id="Dwj-eR-QHQ"/>
+                                                        <constraint firstAttribute="height" constant="28" id="ODb-fA-7fR"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="n0o-am-GBM">
+                                                    <rect key="frame" x="52" y="14" width="350" height="44"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hu8-4u-bV2">
+                                                            <rect key="frame" x="0.0" y="0.0" width="350" height="18"/>
+                                                            <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="18"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3zY-Ce-gFl">
+                                                            <rect key="frame" x="0.0" y="26" width="350" height="18"/>
+                                                            <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="16"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="Hu8-4u-bV2" firstAttribute="width" secondItem="n0o-am-GBM" secondAttribute="width" id="ZOt-kp-HZs"/>
+                                                    </constraints>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="n0o-am-GBM" firstAttribute="leading" secondItem="9GT-cP-O2l" secondAttribute="trailing" constant="12" id="2wf-q9-X0c"/>
+                                                <constraint firstItem="9GT-cP-O2l" firstAttribute="centerY" secondItem="m4O-MU-tKd" secondAttribute="centerY" id="9XI-wY-Dr3"/>
+                                                <constraint firstAttribute="trailing" secondItem="n0o-am-GBM" secondAttribute="trailing" constant="12" id="hkz-nC-Wt8"/>
+                                                <constraint firstItem="9GT-cP-O2l" firstAttribute="leading" secondItem="m4O-MU-tKd" secondAttribute="leading" constant="12" id="wS8-Ti-qKS"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <constraints>
+                                            <constraint firstItem="n0o-am-GBM" firstAttribute="centerY" secondItem="YN1-0I-pEo" secondAttribute="centerY" id="9Vc-VF-4jp"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="expiresLabel" destination="3zY-Ce-gFl" id="zMo-1J-Iey"/>
+                                            <outlet property="nameValueLabel" destination="Hu8-4u-bV2" id="foN-bK-52z"/>
+                                            <outlet property="stateImageView" destination="9GT-cP-O2l" id="Qg7-pq-owi"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NoCookies" textLabel="ZKp-Ve-8Ve" rowHeight="62" style="IBUITableViewCellStyleDefault" id="VtV-R1-O9E" customClass="CookieDetailCell" customModule="DuckDuckGo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="340" width="414" height="62"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VtV-R1-O9E" id="9ac-xB-DSI">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="62"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="No cookies found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZKp-Ve-8Ve">
+                                                    <rect key="frame" x="20" y="0.0" width="374" height="62"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ja6-VL-A4y" firstAttribute="bottom" secondItem="MlN-OV-PxU" secondAttribute="bottom" id="1DW-i2-20e"/>
+                            <constraint firstItem="ja6-VL-A4y" firstAttribute="top" secondItem="MlN-OV-PxU" secondAttribute="top" id="Znp-Pd-e10"/>
+                            <constraint firstItem="MlN-OV-PxU" firstAttribute="width" secondItem="niU-ZM-5o1" secondAttribute="width" id="aqr-sN-LmR"/>
+                            <constraint firstItem="MlN-OV-PxU" firstAttribute="centerX" secondItem="ja6-VL-A4y" secondAttribute="centerX" id="fU9-sP-OZT"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ja6-VL-A4y"/>
+                    </view>
+                    <connections>
+                        <outlet property="domainLabel" destination="qyd-cV-wew" id="1QI-xU-9v3"/>
+                        <outlet property="iconImage" destination="uSu-hp-XZO" id="cH6-Ub-a2Q"/>
+                        <outlet property="messageLabel" destination="LHa-7V-IUV" id="lpG-gX-IVk"/>
+                        <outlet property="subtitleLabel" destination="Vl0-Z4-Zir" id="GHU-ZK-3Te"/>
+                        <outlet property="tableView" destination="MlN-OV-PxU" id="qkJ-vQ-PlS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NCU-nq-dNx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="jw9-aK-8ge" userLabel="Link Tap"/>
+                <tapGestureRecognizer id="RFy-xn-3EP" userLabel="Back Tap">
+                    <connections>
+                        <action selector="onBack" destination="loT-DD-2Av" id="gSU-89-sCI"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="5056.521739130435" y="1486.9565217391305"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Fire" width="19" height="24"/>
         <image name="PP Arrow Back" width="10" height="16"/>
         <image name="PP Arrow Forward" width="10" height="16"/>
         <image name="PP Dismiss" width="16" height="16"/>

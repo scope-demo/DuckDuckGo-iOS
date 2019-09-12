@@ -21,6 +21,8 @@ import WebKit
 
 public class WebCacheManager {
 
+    private static var protectedCookies = Set<String>()
+
     private struct Constants {
         static let cookieDomain = "duckduckgo.com"
     }
@@ -43,6 +45,29 @@ public class WebCacheManager {
         cookieStorage.clear()
     }
 
+    public static func cookies(for url: URL, completion: @escaping ([HTTPCookie]) -> Void) {
+        guard #available(iOS 11, *) else { return }
+        guard let host = url.host else { return }
+        WebCacheManager.dataStore.httpCookieStore.getAllCookies { cookies in
+            completion(cookies.filter { host.hasSuffix($0.domain) })
+        }
+    }
+
+    public static func isProtected(cookie: HTTPCookie) -> Bool {
+        return protectedCookies.contains(cookie.domain + "/" + cookie.name)
+    }
+
+    public static func setProtected(cookie: HTTPCookie, _ protected: Bool) {
+
+        let key = cookie.domain + "/" + cookie.name
+        if protected {
+            protectedCookies.insert(key)
+        } else {
+            protectedCookies.remove(key)
+        }
+
+    }
+
     /**
      Clears the cache of all data, except duckduckgo cookies
      */
@@ -58,10 +83,9 @@ public class WebCacheManager {
     private static func extractAllowedCookiesThenClear(in cookieStore: WKHTTPCookieStore) {
         let cookieStorage = CookieStorage()
         cookieStore.getAllCookies { cookies in
-            let cookies = cookies.filter({ $0.domain == Constants.cookieDomain })
+            let cookies = cookies.filter({ $0.domain == Constants.cookieDomain || isProtected(cookie: $0) })
             for cookie in cookies {
                 cookieStorage.setCookie(cookie)
-
             }
 
             DispatchQueue.main.async {
