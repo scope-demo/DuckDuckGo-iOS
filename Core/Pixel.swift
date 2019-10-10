@@ -18,6 +18,7 @@
 //
 
 import Foundation
+import MetricKit
 import Alamofire
 
 public enum PixelName: String {
@@ -173,6 +174,13 @@ public class Pixel {
 
     private static let appUrls = AppUrls()
     
+    private static var log: OSLog? = {
+        if #available(iOSApplicationExtension 13.0, *) {
+            return MXMetricManager.makeLogHandle(category: "Pixels")
+        }
+        return nil
+    }()
+    
     private struct Constants {
         static let tablet = "tablet"
         static let phone = "phone"
@@ -192,6 +200,10 @@ public class Pixel {
             newParams[PixelParameters.test] = PixelValues.test
         }
         
+        if let log = log, #available(iOSApplicationExtension 13.0, *) {
+            mxSignpost(.begin, log: log, name: "Pixel fired")
+        }
+        
         let formFactor = deviceType == .pad ? Constants.tablet : Constants.phone
         let url = appUrls
             .pixelUrl(forPixelNamed: pixel.rawValue, formFactor: formFactor)
@@ -199,6 +211,19 @@ public class Pixel {
         
         Alamofire.request(url, headers: headers).validate(statusCode: 200..<300).response { response in
             Logger.log(items: "Pixel fired \(pixel.rawValue)")
+            
+            if let log = log, #available(iOSApplicationExtension 13.0, *) {
+                mxSignpost(.end, log: log, name: "Pixel fired")
+            }
+            
+            if let log = log, #available(iOSApplicationExtension 13.0, *) {
+                if response.error == nil {
+                    mxSignpost(.event, log: log, name: "Pixel succeed")
+                } else {
+                    mxSignpost(.event, log: log, name: "Pixel failed")
+                }
+            }
+ 
             onComplete(response.error)
         }
     }
