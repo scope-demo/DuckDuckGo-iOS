@@ -1,0 +1,19 @@
+name: Scope Testing
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build dependencies
+      run: carthage bootstrap --platform iOS
+    - name: Scope for iOS
+      uses: undefinedlabs/scope-for-ios-action@v1
+      with:
+        dsn: ${{ secrets.SCOPE_DSN }}
+        project: DuckDuckGo.xcodeproj
+        scheme: DuckDuckGo
