@@ -10,6 +10,8 @@ jobs:
     steps:
     - name: Check if SCOPE_DSN is set
       run: if [ "${{secrets.SCOPE_DSN}}" = "" ]; then exit 1; fi
+    - name: Install swiftlint
+      run: brew install swiftlint
     - uses: actions/checkout@v1
     - name: Checkout submodules
       run: git submodule update --init --recursive
