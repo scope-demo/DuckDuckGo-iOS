@@ -8,8 +8,6 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - name: Check if SCOPE_DSN is set
-      run: if [ "${{secrets.SCOPE_DSN}}" = "" ]; then exit 1; fi
     - name: Install swiftlint
       run: brew install swiftlint
     - uses: actions/checkout@v1
@@ -23,3 +21,4 @@ jobs:
         dsn: ${{ secrets.SCOPE_DSN }}
         project: DuckDuckGo.xcodeproj
         scheme: DuckDuckGo
+        instrumentHttpPayloads: true
