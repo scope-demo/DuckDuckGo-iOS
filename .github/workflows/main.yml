@@ -22,3 +22,4 @@ jobs:
         project: DuckDuckGo.xcodeproj
         scheme: DuckDuckGo
         instrumentHttpPayloads: true
+
