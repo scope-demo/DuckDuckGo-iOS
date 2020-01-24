@@ -16,10 +16,13 @@ jobs:
     - name: Build dependencies
       run: carthage bootstrap --platform iOS
     - name: Scope for iOS
-      uses: undefinedlabs/scope-for-ios-action@v1
+      uses: undefinedlabs/scope-for-swift-action@v1
       with:
         dsn: ${{ secrets.SCOPE_DSN }}
+        platform: ios
         project: DuckDuckGo.xcodeproj
         scheme: DuckDuckGo
-        instrumentHttpPayloads: true
+        codePath: true
+      env:
+        SCOPE_INSTRUMENTATION_HTTP_PAYLOADS: YES
 
