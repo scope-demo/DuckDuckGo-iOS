@@ -20,6 +20,7 @@
 import UIKit
 import Core
 import WebKit
+import os.log
 
 class TabSwitcherViewController: UIViewController {
 
@@ -106,7 +107,7 @@ class TabSwitcherViewController: UIViewController {
     }
     
     private func scrollToInitialTab() {
-        guard let index = tabsModel.currentIndex else { return }
+        let index = tabsModel.currentIndex
         guard index < collectionView.numberOfItems(inSection: 0) else { return }
         let indexPath = IndexPath(row: index, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
@@ -121,7 +122,7 @@ class TabSwitcherViewController: UIViewController {
             view.showBottomToast(UserText.bookmarkAllTabsSaved)
         } else {
             let failedToSaveCount = openTabsCount - results.newBookmarksCount - results.existingBookmarksCount
-            Logger.log(text: "Failed to save \(failedToSaveCount) tabs")
+            os_log("Failed to save %d tabs", log: generalLog, type: .debug, failedToSaveCount)
             view.showBottomToast(UserText.bookmarkAllTabsFailedToSave)
         }
     }
@@ -132,8 +133,8 @@ class TabSwitcherViewController: UIViewController {
         var newBookmarksCount: Int = 0
         var existingBookmarksCount: Int = 0
         
-        for aTab in tabs {
-            if let link = aTab.link {
+        tabs.forEach { tab in
+            if let link = tab.link {
                 if bookmarksManager.contains(url: link.url) {
                     existingBookmarksCount += 1
                 } else {
@@ -141,9 +142,10 @@ class TabSwitcherViewController: UIViewController {
                     newBookmarksCount += 1
                 }
             } else {
-                Logger.log(text: "no valid link found for tab \(aTab)")
+                os_log("no valid link found for tab %s", log: generalLog, type: .debug, String(describing: tab))
             }
         }
+        
         return (newBookmarksCount: newBookmarksCount, existingBookmarksCount: existingBookmarksCount)
     }
     
@@ -192,13 +194,16 @@ class TabSwitcherViewController: UIViewController {
     }
 
     @IBAction func onFirePressed() {
-        Pixel.fire(pixel: .forgetAllPressedTabSwitching)
+        Pixel.fire(pixel: .forgetAllPressedTabSwitching, withAdditionalParameters: PreserveLogins.shared.forgetAllPixelParameters)
         
         let alert = ForgetDataAlert.buildAlert(forgetTabsAndDataHandler: { [weak self] in
-            self?.forgetAll()
+            guard let self = self else { return }
+            PreserveLoginsAlert.showInitialPromptIfNeeded(usingController: self) { [weak self] in
+                self?.forgetAll()
+            }
         })
+        self.present(controller: alert, fromView: self.toolbar)
         
-        present(controller: alert, fromView: toolbar)
     }
 
     private func forgetAll() {

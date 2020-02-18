@@ -1,2 +1,1 @@
-• Improvements to onboarding flow.
-• Bug fixes.
+• You can now choose to stay signed in to websites when clearing data. Head over to settings to enable this feature.

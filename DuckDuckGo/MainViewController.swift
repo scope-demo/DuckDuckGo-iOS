@@ -55,7 +55,6 @@ class MainViewController: UIViewController {
     @IBOutlet weak var findInPageBottomLayoutConstraint: NSLayoutConstraint!
     
     weak var notificationView: NotificationView?
-    weak var homeRowCTAController: UIViewController?
 
     var omniBar: OmniBar!
     var chromeManager: BrowserChromeManager!
@@ -114,10 +113,6 @@ class MainViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         startOnboardingFlowIfNotSeenBefore()
-
-        if HomeRowCTA().shouldShow() {
-            showHomeRowCTA()
-        }
     }
     
     private func registerForKeyboardNotifications() {
@@ -221,6 +216,7 @@ class MainViewController: UIViewController {
         if let navigationController = segue.destination as? UINavigationController,
             let controller = navigationController.topViewController as? SettingsViewController {
             controller.homePageSettingsDelegate = self
+            controller.preserveLoginsSettingsDelegate = self
             return
         }
         
@@ -266,7 +262,7 @@ class MainViewController: UIViewController {
     }
 
     private func loadInitialView() {
-        if let tab = currentTab {
+        if let tab = currentTab, tab.link != nil {
             addToView(tab: tab)
             refreshControls()
         } else {
@@ -285,6 +281,7 @@ class MainViewController: UIViewController {
         findInPageView.isHidden = true
         chromeManager.detach()
         
+        currentTab?.dismiss()
         removeHomeScreen()
 
         let controller = HomeViewController.loadFromStoryboard()
@@ -295,7 +292,6 @@ class MainViewController: UIViewController {
 
         addToView(controller: controller)
 
-        tabManager.clearSelection()
         refreshControls()
     }
 
@@ -306,18 +302,22 @@ class MainViewController: UIViewController {
     }
 
     @IBAction func onFirePressed() {
-        Pixel.fire(pixel: .forgetAllPressedBrowsing)
-        
+        Pixel.fire(pixel: .forgetAllPressedBrowsing, withAdditionalParameters: PreserveLogins.shared.forgetAllPixelParameters)
+
         let alert = ForgetDataAlert.buildAlert(forgetTabsAndDataHandler: { [weak self] in
-            self?.forgetAllWithAnimation {}
+            guard let self = self else { return }
+            PreserveLoginsAlert.showInitialPromptIfNeeded(usingController: self) { [weak self] in
+                self?.forgetAllWithAnimation {}
+            }
         })
-        
-        present(controller: alert, fromView: toolbar)
+        self.present(controller: alert, fromView: self.toolbar)
     }
     
     func onQuickFirePressed() {
-        forgetAllWithAnimation {}
-        dismiss(animated: true)
+        PreserveLoginsAlert.showInitialPromptIfNeeded(usingController: self) {
+            self.forgetAllWithAnimation {}
+            self.dismiss(animated: true)
+        }
     }
 
     @IBAction func onBackPressed() {
@@ -346,6 +346,8 @@ class MainViewController: UIViewController {
         loadViewIfNeeded()
         addTab(url: url)
         refreshOmniBar()
+        refreshTabIcon()
+        refreshControls()
     }
 
     func launchNewSearch() {
@@ -361,11 +363,12 @@ class MainViewController: UIViewController {
     }
 
     func loadUrl(_ url: URL) {
-        if let currentTab = currentTab {
-            currentTab.load(url: url)
-        } else {
-            loadUrlInNewTab(url)
-        }
+        customNavigationBar.alpha = 1
+        allowContentUnderflow = false
+        currentTab?.load(url: url)
+        guard let tab = currentTab else { fatalError("no tab") }
+        select(tab: tab)
+        omniBar.resignFirstResponder()
     }
 
     private func addTab(url: URL?) {
@@ -380,8 +383,12 @@ class MainViewController: UIViewController {
     }
 
     fileprivate func select(tab: TabViewController) {
-        addToView(tab: tab)
-        refreshControls()
+        if tab.link == nil {
+            attachHomeScreen()
+        } else {
+            addToView(tab: tab)
+            refreshControls()
+        }
     }
 
     private func addToView(tab: TabViewController) {
@@ -425,7 +432,7 @@ class MainViewController: UIViewController {
     }
 
     private func refreshOmniBar() {
-        guard let tab = currentTab else {
+        guard let tab = currentTab, tab.link != nil else {
             omniBar.stopBrowsing()
             return
         }
@@ -621,6 +628,8 @@ class MainViewController: UIViewController {
     }
 
     func newTab() {
+        currentTab?.dismiss()
+        tabManager.addHomeTab()
         attachHomeScreen()
         homeController?.openedAsNewTab()
     }
@@ -818,7 +827,7 @@ extension MainViewController: HomeControllerDelegate {
     }
 
     func home(_ home: HomeViewController, didRequestUrl url: URL) {
-        loadUrlInNewTab(url)
+       loadUrl(url)
     }
     
     func home(_ home: HomeViewController, didRequestContentOverflow shouldOverflow: Bool) -> CGFloat {
@@ -831,10 +840,6 @@ extension MainViewController: HomeControllerDelegate {
         dismissAutcompleteSuggestions()
         omniBar.resignFirstResponder()
     }
-
-    func showInstructions(_ home: HomeViewController) {
-        launchInstructions()
-    }
     
     func showSettings(_ home: HomeViewController) {
         launchSettings()
@@ -843,6 +848,27 @@ extension MainViewController: HomeControllerDelegate {
 }
 
 extension MainViewController: TabDelegate {
+
+    func tab(_ tab: TabViewController,
+             didRequestNewWebViewWithConfiguration configuration: WKWebViewConfiguration,
+             for navigationAction: WKNavigationAction) -> WKWebView? {
+
+        showBars()
+
+        let newTab = tabManager.addURLRequest(navigationAction.request, withConfiguration: configuration)
+        newTab.openedByPage = true
+        newTabAnimation {
+            self.omniBar.resignFirstResponder()
+            self.addToView(tab: newTab)
+            self.refreshOmniBar()
+        }
+
+        return newTab.webView
+    }
+
+    func tabDidRequestClose(_ tab: TabViewController) {
+        closeTab(tab.tabModel)
+    }
 
     func tabLoadingStateDidChange(tab: TabViewController) {
         findInPageView.done()
@@ -863,13 +889,14 @@ extension MainViewController: TabDelegate {
         animateBackgroundTab()
     }
 
-    func tab(_ tab: TabViewController, didRequestNewTabForUrl url: URL, animated: Bool) {
+    func tab(_ tab: TabViewController, didRequestNewTabForUrl url: URL, openedByPage: Bool) {
         _ = findInPageView.resignFirstResponder()
 
-        if animated {
+        if openedByPage {
             showBars()
             newTabAnimation {
                 self.loadUrlInNewTab(url)
+                self.tabManager.current?.openedByPage = true
             }
             tabSwitcherButton.incrementAnimated()
         } else {
@@ -939,12 +966,21 @@ extension MainViewController: TabSwitcherDelegate {
 
     func tabSwitcher(_ tabSwitcher: TabSwitcherViewController, didSelectTab tab: Tab) {
         guard let index = tabManager.model.indexOf(tab: tab) else { return }
+
         customNavigationBar.alpha = 1
         allowContentUnderflow = false
         select(tabAt: index)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.onCancelPressed()
+        }
+        
     }
 
     func tabSwitcher(_ tabSwitcher: TabSwitcherViewController, didRemoveTab tab: Tab) {
+        if tabManager.count == 1 {
+            tabSwitcher.dismiss()
+        }
         closeTab(tab)
     }
     
@@ -954,7 +990,7 @@ extension MainViewController: TabSwitcherDelegate {
     }
 
     func tabSwitcherDidRequestForgetAll(tabSwitcher: TabSwitcherViewController) {
-        forgetAllWithAnimation {
+        self.forgetAllWithAnimation {
             tabSwitcher.dismiss(animated: false, completion: nil)
         }
     }
@@ -1005,13 +1041,14 @@ extension MainViewController: GestureToolbarButtonDelegate {
     }
     
     func longPressDetected(in sender: GestureToolbarButton) {
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         guard currentTab != nil else {
             view.showBottomToast(UserText.webSaveBookmarkNone)
             return
         }
         
         Pixel.fire(pixel: .tabBarBookmarksLongPressed)
-        currentTab!.promptSaveBookmarkAction()
+        currentTab!.saveAsBookmark()
     }
     
 }
@@ -1037,15 +1074,25 @@ extension MainViewController: AutoClearWorker {
     
     func forgetData() {
         findInPageView?.done()
+        
+        if PreserveLogins.shared.userDecision != .preserveLogins {
+            PreserveLogins.shared.clearAll()
+        } else {
+            PreserveLogins.shared.clearDetected()
+        }
+        
         ServerTrustCache.shared.clear()
         KingfisherManager.shared.cache.clearDiskCache()
-        WebCacheManager.clear()
+
+        let pixel = TimedPixel(.forgetAllDataCleared)
+        WebCacheManager.shared.clear {
+            pixel.fire(withAdditionalParmaeters: [PixelParameters.tabCount: "\(self.tabManager.count)"])
+        }
     }
     
     fileprivate func forgetAllWithAnimation(completion: @escaping () -> Void) {
         let spid = Instruments.shared.startTimedEvent(.clearingData)
-        findInPageView.done()
-        Pixel.fire(pixel: .forgetAllExecuted)
+        Pixel.fire(pixel: .forgetAllExecuted, withAdditionalParameters: PreserveLogins.shared.forgetAllPixelParameters)
         forgetData()
         FireAnimation.animate {
             self.forgetTabs()
@@ -1096,40 +1143,26 @@ extension MainViewController: HomePageSettingsDelegate {
     
 }
 
+extension MainViewController: PreserveLoginsSettingsDelegate {
+
+    func forgetAllRequested(completion: @escaping () -> Void) {
+        forgetAllWithAnimation(completion: completion)
+    }
+
+}
+
 extension MainViewController: OnboardingDelegate {
         
     func onboardingCompleted(controller: UIViewController) {
         markOnboardingSeen()
         controller.modalTransitionStyle = .crossDissolve
         controller.dismiss(animated: true)
-        homeController?.resetHomeRowCTAAnimations()
-        showHomeRowCTA()
+        homeController?.prepareForPresentation()
     }
     
     func markOnboardingSeen() {
         var settings = DefaultTutorialSettings()
         settings.hasSeenOnboarding = true
-    }
-    
-}
-
-extension MainViewController {
-    
-    private func hideHomeRowCTA() {
-        homeRowCTAController?.view.removeFromSuperview()
-        homeRowCTAController?.removeFromParent()
-        homeRowCTAController = nil
-    }
-
-    private func showHomeRowCTA(variantManager: VariantManager = DefaultVariantManager()) {
-        guard variantManager.isSupported(feature: .alertCTA), homeRowCTAController == nil else { return }
-        
-        let childViewController =  UnifiedAddToHomeRowCTAViewController.loadAlertFromStoryboard()
-        addChild(childViewController)
-        view.addSubview(childViewController.view)
-        childViewController.view.frame = view.bounds
-        childViewController.didMove(toParent: self)
-        self.homeRowCTAController = childViewController
     }
     
 }

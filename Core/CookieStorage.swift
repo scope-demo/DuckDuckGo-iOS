@@ -18,8 +18,9 @@
 //
 
 import Foundation
+import os.log
 
-class CookieStorage {
+public class CookieStorage {
 
     struct Constants {
         static let key = "com.duckduckgo.allowedCookies"
@@ -38,7 +39,7 @@ class CookieStorage {
                 })
 
                 if let cookie = HTTPCookie(properties: properties) {
-                    Logger.log(items: "read cookie", cookie.domain, cookie.name, cookie.value)
+                    os_log("read cookie %s %s %s", log: generalLog, type: .debug, cookie.domain, cookie.name, cookie.value)
                     storedCookies.append(cookie)
                 }
             }
@@ -47,30 +48,36 @@ class CookieStorage {
         return storedCookies
     }
 
-    init(userDefaults: UserDefaults = UserDefaults.standard) {
+    public init(userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
     }
 
     func clear() {
         userDefaults.removeObject(forKey: Constants.key)
-        Logger.log(items: "cleared cookies")
+        os_log("cleared cookies", log: generalLog, type: .debug)
     }
 
     func setCookie(_ cookie: HTTPCookie) {
-        Logger.log(items: "storing cookie", cookie.domain, cookie.name, cookie.value)
+        os_log("storing cookie %s %s %s", log: generalLog, type: .debug, cookie.domain, cookie.name, cookie.value)
+        
         var cookieData = [String: Any?]()
         cookie.properties?.forEach({
             cookieData[$0.key.rawValue] = $0.value
         })
+
+        // Same site policy is not returned in the cookie properties so have to use iOS 13 api to get it - setting is fine.  Leaving same site policy
+        //  untouched for previous versions of iOS as changing from Strict to Lax blindly could be a security issue if sites have set it as such.
+        //  See https://www.owasp.org/index.php/SameSite
+        if #available(iOS 13, *) {
+            cookieData[HTTPCookiePropertyKey.sameSitePolicy.rawValue] = cookie.sameSitePolicy ?? HTTPCookieStringPolicy.sameSiteLax
+        }
+        
         setCookie(cookieData)
     }
 
     private func setCookie(_ cookieData: [String: Any?]) {
-        var cookies = userDefaults.object(forKey: Constants.key) as? [[String: Any?]]
-        if cookies == nil {
-            cookies = [[String: Any?]]()
-        }
-        cookies?.append(cookieData)
+        var cookies = userDefaults.object(forKey: Constants.key) as? [[String: Any?]] ?? []
+        cookies.append(cookieData)
         userDefaults.set(cookies, forKey: Constants.key)
     }
 
