@@ -28,7 +28,16 @@ class BookmarkCell: UITableViewCell {
     @IBOutlet weak var linkImage: UIImageView!
     @IBOutlet weak var title: UILabel!
 
-    private(set) var link: Link?
+    var link: Link? {
+        didSet {
+            if let linkTitle = link?.title?.trimWhitespace(), !linkTitle.isEmpty {
+                title.text = linkTitle
+            } else {
+                title.text = link?.url.host?.dropPrefix(prefix: "www.") ?? ""
+            }
+            linkImage.loadFavicon(forDomain: link?.url.host)
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -40,27 +49,4 @@ class BookmarkCell: UITableViewCell {
         super.setEditing(editing, animated: animated)
     }
 
-    func update(withLink link: Link) {
-        self.link = link
-        title.text = link.title
-        configureFavicon(forDomain: link.url.host)
-    }
-
-    private func configureFavicon(forDomain domain: String?) {
-        let placeholder = #imageLiteral(resourceName: "GlobeSmall")
-        linkImage.image = placeholder
-
-        if let domain = domain {
-            let faviconUrl = AppUrls().faviconUrl(forDomain: domain)
-
-            linkImage.kf.setImage(with: faviconUrl,
-                                  placeholder: placeholder,
-                                  options: [
-                                    .downloader(NotFoundCachingDownloader()),
-                                    .targetCache(ImageCache(name: BookmarksManager.imageCacheName))
-                                    ],
-                                  progressBlock: nil,
-                                  completionHandler: nil)
-        }
-    }
 }

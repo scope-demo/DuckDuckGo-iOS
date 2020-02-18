@@ -19,6 +19,7 @@
 
 import Foundation
 import Alamofire
+import os.log
 
 public enum PixelName: String {
     
@@ -27,7 +28,8 @@ public enum PixelName: String {
     case forgetAllPressedBrowsing = "mf_bp"
     case forgetAllPressedTabSwitching = "mf_tp"
     case forgetAllExecuted = "mf"
-    
+    case forgetAllDataCleared = "mf_dc"
+
     case privacyDashboardOpened = "mp"
     case privacyDashboardScorecard = "mp_c"
     case privacyDashboardEncryption = "mp_e"
@@ -72,6 +74,15 @@ public enum PixelName: String {
     case settingsThemeChangedSystemDefault = "ms_ts"
     case settingsThemeChangedLight = "ms_tl"
     case settingsThemeChangedDark = "ms_td"
+
+    case settingsAppIconShown = "ms_ais"
+    case settingsAppIconChangedPrefix = "ms_aic_"
+    case settingsAppIconChangedRed = "ms_aic_red"
+    case settingsAppIconChangedYellow = "ms_aic_yellow"
+    case settingsAppIconChangedGreen = "ms_aic_green"
+    case settingsAppIconChangedBlue = "ms_aic_blue"
+    case settingsAppIconChangedPurple = "ms_aic_purple"
+    case settingsAppIconChangedBlack = "ms_aic_black"
 
     case settingsHomePageShown = "ms_hp"
     case settingsHomePageSimple = "ms_hp_s"
@@ -123,10 +134,6 @@ public enum PixelName: String {
     case homeScreenDeleteFavorite = "mh_df"
     case homeScreenPrivacyStatsTapped = "mh_ps"
     
-    case homeRowCTAShowMeTapped = "m_ha"
-    case homeRowCTANoThanksTapped = "m_hb"
-    case homeRowCTAGotItTapped = "m_hg"
-    
     case homeRowCTAReminderTapped = "m_hc"
     case homeRowCTAReminderDismissed = "m_hd"
     
@@ -171,6 +178,18 @@ public enum PixelName: String {
     
     case brokenSiteReported = "m_bsr"
 
+    case preserveLoginsUserDecisionPreserve = "m_pl_p"
+    case preserveLoginsUserDecisionForget = "m_pl_f"
+    case preserveLoginsSettingsWhilePreserving = "m_pl_s_p"
+    case preserveLoginsSettingsWhileForgetting = "m_pl_s_f"
+    case preserveLoginsSettingsNewUser = "m_pl_s_u"
+    case preserveLoginsSettingsSwitchOn = "m_pl_s_on"
+    case preserveLoginsSettingsSwitchOff = "m_pl_s_off"
+    case preserveLoginsSettingsEdit = "m_pl_s_c_e"
+    case preserveLoginsSettingsDeleteEditing = "m_pl_s_c_ie"
+    case preserveLoginsSettingsDeleteNotEditing = "m_pl_s_c_in"
+    case preserveLoginsSettingsClearAll = "m_pl_s_c_a"
+    
     // debug pixels:
     
     case dbMigrationError = "m_d_dbme"
@@ -208,6 +227,8 @@ public struct PixelParameters {
     static let errorCount = "c"
     static let underlyingErrorCode = "ue"
     static let underlyingErrorDesc = "ud"
+
+    public static let tabCount = "tc"
 }
 
 public struct PixelValues {
@@ -244,7 +265,7 @@ public class Pixel {
             .addParams(newParams)
         
         Alamofire.request(url, headers: headers).validate(statusCode: 200..<300).response { response in
-            Logger.log(items: "Pixel fired \(pixel.rawValue)")
+            os_log("Pixel fired %s", log: generalLog, type: .debug, pixel.rawValue)
             onComplete(response.error)
         }
     }
@@ -282,9 +303,11 @@ public class TimedPixel {
         self.date = date
     }
     
-    public func fire(_ fireDate: Date = Date()) {
+    public func fire(_ fireDate: Date = Date(), withAdditionalParmaeters params: [String: String?] = [:]) {
         let duration = String(fireDate.timeIntervalSince(date))
-        Pixel.fire(pixel: pixel, withAdditionalParameters: [PixelParameters.duration: duration])
+        var newParams = params
+        newParams[PixelParameters.duration] = duration
+        Pixel.fire(pixel: pixel, withAdditionalParameters: newParams)
     }
     
 }
