@@ -25,4 +25,5 @@ jobs:
         codePath: true
       env:
         SCOPE_INSTRUMENTATION_HTTP_PAYLOADS: YES
+        SCOPE_RUNNER_ENABLED: YES
 
